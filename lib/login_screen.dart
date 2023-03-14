@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_operations/sign_up.dart';
 import 'package:crud_operations/users_list.dart';
@@ -116,9 +118,8 @@ class _HomeScreenState extends State<LoginScreen> {
                           const Text('Email or Password not correct');
                         }
                         else{
-                          // ignore: use_build_context_synchronously
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context)=> const UsersList()));
+                              MaterialPageRoute(builder: (context)=> UsersList(uid)));
                         }
                       } on FirebaseAuthException catch (e)
 
@@ -134,9 +135,10 @@ class _HomeScreenState extends State<LoginScreen> {
                       //Add a new item
                       _reference.add(dataToSend);
                     }
-                    // ignore: use_build_context_synchronously
+
+                    var uid = FirebaseFirestore.instance.collection('Users').doc(currentUser?.uid);
                     Navigator.push(
-                      context,MaterialPageRoute(builder: (context) => const UsersList()),
+                      context,MaterialPageRoute(builder: (context) => UsersList(uid)),
                     );
 
                   }, child: const Text('Login', style: TextStyle(fontSize: 20),),

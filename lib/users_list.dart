@@ -4,20 +4,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_operations/login_screen.dart';
 import 'package:crud_operations/user_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 class UsersList extends StatefulWidget {
-  const UsersList({Key? key}) : super(key: key);
+  const UsersList(DocumentReference<Map<String, dynamic>> uid, {Key? key}) : super(key: key);
 
    @override
   State<UsersList> createState() => _UsersListState();
 }
 
 class _UsersListState extends State<UsersList> {
-  User? userId = FirebaseAuth.instance.currentUser;
   final currentUser= FirebaseAuth.instance;
+  User? userId = FirebaseAuth.instance.currentUser;
+  @override
+
   //late Stream<QuerySnapshot> _stream;
   //final CollectionReference _reference= FirebaseFirestore.instance.collection('Users');
 
@@ -36,7 +39,7 @@ class _UsersListState extends State<UsersList> {
         actions: [
           GestureDetector(
             onTap: () {
-              FirebaseAuth.instance.signOut();
+              //FirebaseAuth.instance.signOut();
               Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
 
             }, child: const Icon(Icons.logout),
@@ -47,7 +50,7 @@ class _UsersListState extends State<UsersList> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Users')
-            .where("userId", isEqualTo: userId ?.uid)
+            .where("userid", isEqualTo: userId ?.uid)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
 
@@ -64,13 +67,7 @@ class _UsersListState extends State<UsersList> {
           if (snapshot.data!.docs.isEmpty) {
             return const Center(child: Text("No Data Found"),);
           }
-          if(snapshot!= null && snapshot.data!=null){
-            return ListView.builder(itemBuilder: (context, index){
-              var Email =snapshot.data!.docs[index]['Email'];
-              var password =snapshot.data!.docs[index]['password'];
-              var docId = snapshot.data!.docs[index].id;
-
-            });
+          if(snapshot.data!=null){
             QuerySnapshot querySnapshot= snapshot.data;
             List<QueryDocumentSnapshot> documents = querySnapshot.docs;
 
@@ -119,3 +116,9 @@ class _UserListState extends State<UserList> {
   }
 }
 
+/*ListView.builder(itemBuilder: (context, index){
+var Email =snapshot.data!.docs[index]['Email'];
+var password =snapshot.data!.docs[index]['password'];
+var docId = snapshot.data!.docs[index].id;
+
+});*/

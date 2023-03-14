@@ -115,6 +115,7 @@ class _SignUpState extends State<SignUp> {
                   var name= controllerName.text.trim();
                   var phoneNo= controllerPhoneNo.text.trim();
                   var userPassword= controllerPassword.text.trim();
+                  var uid = FirebaseFirestore.instance.collection('Users').doc(currentUser?.uid);
 
                   FirebaseAuth.instance.createUserWithEmailAndPassword
                     (email: userEmail, password: userPassword).then(
@@ -128,8 +129,8 @@ class _SignUpState extends State<SignUp> {
                           'createdAt' : DateTime.now(),
                           'userid' : currentUser!.uid,
                         }).then((value) => {
-                          //FirebaseAuth.instance.signOut(),
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersList()))
+                          FirebaseAuth.instance.signOut(),
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UsersList(uid)))
                       })
                   );
 
