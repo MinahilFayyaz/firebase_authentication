@@ -1,5 +1,6 @@
 import 'package:crud_operations/login_screen.dart';
 import 'package:crud_operations/users_list.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -133,8 +134,6 @@ class _SignUpState extends State<SignUp> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => UsersList(uid)))
                       })
                   );
-
-
               }, child: const Text('Sign Up', style: TextStyle(fontSize: 20),),
               ),
             ),
@@ -144,3 +143,9 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+class FirebaseAnalyticsService {
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  FirebaseAnalyticsObserver appAnalyticsObserver() =>
+      FirebaseAnalyticsObserver(analytics: _analytics);
+}
+
